@@ -1,1 +1,1 @@
-tsc -sourcemap -t ES5 --noImplicitAny ensure.ts
+tsc -sourcemap -t ES5 --noImplicitAny ensure.ts -d
