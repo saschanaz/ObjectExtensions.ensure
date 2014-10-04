@@ -1,5 +1,6 @@
-module ObjectExtensions {
-    export function ensure(object: { [key: string]: any }, properties: { [key: string]: any }) {
+var ObjectExtensions;
+(function (ObjectExtensions) {
+    function ensure(object, properties) {
         for (var key in properties) {
             var value = properties[key];
             switch (typeof value) {
@@ -21,4 +22,6 @@ module ObjectExtensions {
         }
         return true;
     }
-}
+    ObjectExtensions.ensure = ensure;
+})(ObjectExtensions || (ObjectExtensions = {}));
+//# sourceMappingURL=ensure.js.map
