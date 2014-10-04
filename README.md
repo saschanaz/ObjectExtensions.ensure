@@ -25,6 +25,7 @@ ObjectExtensions.ensure({ str: 3 }, { str: "string"}); // false
 // type checking for non-primitive-typed properties
 ObjectExtensions.ensure({ str: new String("abc") }, { str: String }); // true
 ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }); // true
+ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }); // true
 ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }); // false
 
 // Nested type checking

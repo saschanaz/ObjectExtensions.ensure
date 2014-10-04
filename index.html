@@ -14,6 +14,7 @@
         // type checking for non-primitive-typed properties
         console.assert(ObjectExtensions.ensure({ str: new String("abc") }, { str: String }) === true);
         console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }) === true);
+        console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLElement }) === true);
         console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }) === false);
 
         // Nested type checking
