@@ -5,6 +5,29 @@
     <meta charset="utf-8" />
     <title>TypeScript HTML App</title>
     <script src="ensure.js"></script>
+    <script>
+    window.addEventListener("DOMContentLoaded", function() {
+        // type checking for primitive-typed properties
+        console.assert(ObjectExtensions.ensure({ str: "abc" }, { str: "string"}) === true);
+        console.assert(ObjectExtensions.ensure({ str: 3 }, { str: "string"}) === false);
+
+        // type checking for non-primitive-typed properties
+        console.assert(ObjectExtensions.ensure({ str: new String("abc") }, { str: String }) === true);
+        console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }) === true);
+        console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }) === false);
+
+        // Nested type checking
+        console.assert(ObjectExtensions.ensure({ obj: { prop: 3 } }, { obj: { prop: "number" } }) === true);
+
+        // Checking mere existence
+        console.assert(ObjectExtensions.ensure({ prop: true }, { prop: null }) === true);
+        console.assert(ObjectExtensions.ensure({ prop: true }, { src: null }) === false);
+
+        // Checking nonexistence
+        console.assert(ObjectExtensions.ensure({ prop: true }, { prop: undefined }) === false);
+        console.assert(ObjectExtensions.ensure({ prop: true }, { src: undefined }) === true);
+    });
+    </script>
 </head>
 <body>
     <h1>TypeScript HTML App</h1>
