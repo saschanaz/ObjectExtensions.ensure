@@ -7,17 +7,17 @@ Simple JavaScript object type checker.
 
 ```typescript
 declare module ObjectExtensions {
-    function ensure(object: {
-        [key: string]: any;
-    }, properties: {
-        [key: string]: any;
-    }): boolean;
+    function ensure(object: any, type: any): boolean;
 }
 ```
 
 # Example
 
 ```javascript
+// type checking for objects themselves
+ObjectExtensions.ensure("abc", "string"); // true
+ObjectExtensions.ensure(true, "boolean"); // true
+
 // type checking for primitive-typed properties
 ObjectExtensions.ensure({ str: "abc" }, { str: "string"}); // true
 ObjectExtensions.ensure({ str: 3 }, { str: "string"}); // false
@@ -30,6 +30,27 @@ ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }); // 
 
 // Nested type checking
 ObjectExtensions.ensure({ obj: { prop: 3 } }, { obj: { prop: "number" } }); // true
+ObjectExtensions.ensure(
+  {
+    obj: {
+      prop: document,
+      other: true
+    },
+    homu: {
+      kawaii: 4,
+      utsukushii: true
+    }
+  },
+  {
+    obj: {
+      prop: Document,
+      other: "boolean"
+    },
+    homu: {
+      kawaii: "number",
+      utsukushii: "boolean"
+    }
+  }); // true
 
 // Checking mere existence
 ObjectExtensions.ensure({ prop: true }, { prop: null }); // true

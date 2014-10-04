@@ -1,41 +1,38 @@
 var ObjectExtensions;
 (function (ObjectExtensions) {
-    function ensure(object, properties) {
-        for (var key in properties) {
-            var type = properties[key];
-            var value = object[key];
-            if (type === null) {
-                if (!(key in object))
-                    return false;
-                continue;
-            } else if (type === undefined) {
-                if (key in object)
-                    return false;
-                continue;
-            }
-            switch (typeof type) {
-                case "string":
-                    if (typeof value !== type)
-                        return false;
-                    break;
-                case "function":
-                    if (!(value instanceof type))
-                        return false;
-                    break;
-                case "object":
-                    if (isClassConstructor(type)) {
-                        if (!(value instanceof type))
-                            return false;
-                    } else {
-                        if (!ObjectExtensions.ensure(value, type))
+    function ensure(object, type) {
+        if (type == null)
+            throw new Error("Existence check for the input object itself is not supported.");
+
+        switch (typeof type) {
+            case "string":
+                return (typeof object === type);
+            case "function":
+                return (object instanceof type);
+            case "object":
+                if (isClassConstructor(type))
+                    return (object instanceof type);
+                else {
+                    for (var key in type) {
+                        var proptype = type[key];
+
+                        // null: just ensure existence
+                        if (proptype === null) {
+                            if (!(key in object))
+                                return false;
+                            continue;
+                        } else if (proptype === undefined) {
+                            if (key in object)
+                                return false;
+                            continue;
+                        } else if (!ObjectExtensions.ensure(object[key], proptype))
                             return false;
                     }
-                    break;
-                default:
-                    throw new Error("A type indicator property should be either string, class constuctor, or nested indicator object.");
-            }
+                    return true;
+                }
+            default:
+                throw new Error("A type indicator property should be either string, class constuctor, or nested indicator object.");
         }
-        return true;
     }
     ObjectExtensions.ensure = ensure;
 

@@ -2,37 +2,62 @@
 
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>TypeScript HTML App</title>
-    <script src="ensure.js"></script>
-    <script>
-    window.addEventListener("DOMContentLoaded", function() {
-        // type checking for primitive-typed properties
-        console.assert(ObjectExtensions.ensure({ str: "abc" }, { str: "string"}) === true);
-        console.assert(ObjectExtensions.ensure({ str: 3 }, { str: "string"}) === false);
+  <meta charset="utf-8" />
+  <title>TypeScript HTML App</title>
+  <script src="ensure.js"></script>
+  <script>
+  window.addEventListener("DOMContentLoaded", function () {
+    // type checking for objects themselves
+    console.assert(ObjectExtensions.ensure("abc", "string") === true);
+    console.assert(ObjectExtensions.ensure(true, "boolean") === true);
 
-        // type checking for non-primitive-typed properties
-        console.assert(ObjectExtensions.ensure({ str: new String("abc") }, { str: String }) === true);
-        console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }) === true);
-        console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLElement }) === true);
-        console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }) === false);
+    // type checking for primitive-typed properties
+    console.assert(ObjectExtensions.ensure({ str: "abc" }, { str: "string"}) === true);
+    console.assert(ObjectExtensions.ensure({ str: 3 }, { str: "string"}) === false);
 
-        // Nested type checking
-        console.assert(ObjectExtensions.ensure({ obj: { prop: 3 } }, { obj: { prop: "number" } }) === true);
+    // type checking for non-primitive-typed properties
+    console.assert(ObjectExtensions.ensure({ str: new String("abc") }, { str: String }) === true);
+    console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }) === true);
+    console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLElement }) === true);
+    console.assert(ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }) === false);
 
-        // Checking mere existence
-        console.assert(ObjectExtensions.ensure({ prop: true }, { prop: null }) === true);
-        console.assert(ObjectExtensions.ensure({ prop: true }, { src: null }) === false);
+    // Nested type checking
+    console.assert(ObjectExtensions.ensure({ obj: { prop: 3 } }, { obj: { prop: "number" } }) === true);
+    console.assert(ObjectExtensions.ensure(
+      {
+        obj: {
+          prop: document,
+          other: true
+        },
+        homu: {
+          kawaii: 4,
+          utsukushii: true
+        }
+      },
+      {
+        obj: {
+          prop: Document,
+          other: "boolean"
+        },
+        homu: {
+          kawaii: "number",
+          utsukushii: "boolean"
+        }
+      }) === true);
 
-        // Checking nonexistence
-        console.assert(ObjectExtensions.ensure({ prop: true }, { prop: undefined }) === false);
-        console.assert(ObjectExtensions.ensure({ prop: true }, { src: undefined }) === true);
-    });
-    </script>
+    // Checking mere existence
+    console.assert(ObjectExtensions.ensure({ prop: true }, { prop: null }) === true);
+    console.assert(ObjectExtensions.ensure({ prop: true }, { src: null }) === false);
+
+    // Checking nonexistence
+    console.assert(ObjectExtensions.ensure({ prop: true }, { prop: undefined }) === false);
+    console.assert(ObjectExtensions.ensure({ prop: true }, { src: undefined }) === true);
+  });
+  </script>
 </head>
 <body>
-    <h1>TypeScript HTML App</h1>
+  <h1>TypeScript HTML App</h1>
 
-    <div id="content"></div>
+  <div id="content"></div>
 </body>
 </html>

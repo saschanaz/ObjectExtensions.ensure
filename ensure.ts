@@ -1,46 +1,41 @@
 module ObjectExtensions {
-    export function ensure(object: { [key: string]: any }, properties: { [key: string]: any }) {
-        for (var key in properties) {
-            var type = properties[key];
-            var value = object[key];
+    export function ensure(object: any, type: any) {
+        if (type == null)
+            throw new Error("Existence check for the input object itself is not supported.");
 
-            // null: just ensure existence
-            if (type === null) {
-                if (!(key in object))
-                    return false;
-                continue;
-            }
-            // undefined: just ensure nonexistence
-            else if (type === undefined) {
-                if (key in object)
-                    return false;
-                continue;
-            }
+        switch (typeof type) {
+            case "string":
+                return (typeof object === type);
+            case "function":
+                return (object instanceof type);
+            case "object":
+                if (isClassConstructor(type))
+                    return (object instanceof type);
+                else {
+                    // property check
+                    for (var key in type) {
+                        var proptype = type[key];
 
-            switch (typeof type) {
-                case "string":
-                    if (typeof value !== type)
-                        return false;
-                    break;
-                case "function":
-                    if (!(value instanceof type))
-                        return false;
-                    break;
-                case "object":
-                    if (isClassConstructor(type)) {
-                        if (!(value instanceof type))
+                        // null: just ensure existence
+                        if (proptype === null) {
+                            if (!(key in object))
+                                return false;
+                            continue;
+                        }
+                        // undefined: just ensure nonexistence
+                        else if (proptype === undefined) {
+                            if (key in object)
+                                return false;
+                            continue;
+                        }
+                        else if (!ObjectExtensions.ensure(object[key], proptype))
                             return false;
                     }
-                    else {
-                        if (!ObjectExtensions.ensure(value, type))
-                            return false;
-                    }
-                    break;
-                default:
-                    throw new Error("A type indicator property should be either string, class constuctor, or nested indicator object.");
-            }
+                    return true;
+                }
+            default:
+                throw new Error("A type indicator property should be either string, class constuctor, or nested indicator object.");
         }
-        return true;
     }
 
     function isClassConstructor(object: any) {
