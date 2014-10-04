@@ -14,7 +14,7 @@ declare module ObjectExtensions {
 # Example
 
 ```javascript
-// type checking for objects themselves
+// type checking for the input object itself
 ObjectExtensions.ensure("abc", "string"); // true
 ObjectExtensions.ensure(true, "boolean"); // true
 
