@@ -2,6 +2,8 @@ module ObjectExtensions {
     export function ensure(object: any, type: any) {
         if (type == null)
             throw new Error("Existence check for the input object itself is not supported.");
+        if (object == null)
+            return false;
 
         switch (typeof type) {
             case "string":

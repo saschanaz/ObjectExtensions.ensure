@@ -14,21 +14,21 @@ declare module ObjectExtensions {
 # Example
 
 ```javascript
-// type checking for the input object itself
+// Type checking for the input object itself
 ObjectExtensions.ensure("abc", "string"); // true
 ObjectExtensions.ensure(true, "boolean"); // true
 
-// type checking for primitive-typed properties
+// Type checking for primitive-typed properties
 ObjectExtensions.ensure({ str: "abc" }, { str: "string"}); // true
 ObjectExtensions.ensure({ str: 3 }, { str: "string"}); // false
 
-// type checking for non-primitive-typed properties
+// Type checking for non-primitive-typed properties
 ObjectExtensions.ensure({ str: new String("abc") }, { str: String }); // true
 ObjectExtensions.ensure({ body: document.body }, { body: HTMLBodyElement }); // true
 ObjectExtensions.ensure({ body: document.body }, { body: HTMLElement }); // true
 ObjectExtensions.ensure({ body: document.body }, { body: HTMLSpanElement }); // false
 
-// Nested type checking
+// Nested type checking, or "structure checking"
 ObjectExtensions.ensure({ obj: { prop: 3 } }, { obj: { prop: "number" } }); // true
 ObjectExtensions.ensure(
   {
