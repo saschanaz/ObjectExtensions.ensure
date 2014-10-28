@@ -13,6 +13,14 @@ module ObjectExtensions {
             case "object":
                 if (isClassConstructor(type))
                     return (object instanceof type);
+                if (Array.isArray(type)) {
+                    //type union
+                    for (var i = 0; i < type.length; i++) {
+                        if (ObjectExtensions.ensure(object, type[i]))
+                            return true;
+                    }
+                    return false;
+                }
                 else {
                     // property check
                     for (var key in type) {

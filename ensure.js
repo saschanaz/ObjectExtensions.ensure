@@ -14,7 +14,13 @@ var ObjectExtensions;
             case "object":
                 if (isClassConstructor(type))
                     return (object instanceof type);
-                else {
+                if (Array.isArray(type)) {
+                    for (var i = 0; i < type.length; i++) {
+                        if (ObjectExtensions.ensure(object, type[i]))
+                            return true;
+                    }
+                    return false;
+                } else {
                     for (var key in type) {
                         var proptype = type[key];
 
